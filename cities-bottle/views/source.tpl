@@ -1,9 +1,12 @@
 % rebase('layout.tpl', title=title, year=year)
 
-<h2>{{ title }} - {{source["name"] }}</h2> 
+%if title != "Add new": 
+<h2>{{ title }} -  {{source["name"] }} </h2> 
+% else: 
+<h2>{{ title }}</h2>
+%end
+%if not source["opendata"]:
 New field  <button type="button" id="more_fields" class="btn btn-default btn-sm"  onclick="add_field({{len(source["data"])+1}});" >Add <span class="glyphicon glyphicon-plus" style="color:green"></span></button>
-
-
 <ul id="source_fields">
     <input type="hidden" id="obj_id" value="{{source["_id"]}}">
 	%count = 0
@@ -23,7 +26,25 @@ New field  <button type="button" id="more_fields" class="btn btn-default btn-sm"
             </button>
 		</li>
 		
-	% end
+	%end
 </ul>
+%else:
+<div class="form-group">
+    <label for="new-item">Name (as stated on portal.opendata.dk)</label> 
+    <div><input type="text" class="form-control" id="new-item"><span class="btn btn-success" role="button" style="margin-top: 8px" onclick="add_new_source();">Add</span></div>
+    <p><div id="status-meta"></div></p>
+    <div><h3>Or click on examples from OpenData.dk: </h3></div>
+    <ul class="list-group">
+        
+        %for data in source["opendata"]:
+        <li class="list-group-item" onclick="set_new_dataset('{{data["link"]}}');">
+            <strong>{{data["title"]}}</strong>
+            <span class="badge">CSV</span>
+            <div> {{data["desc"]}}</div>
+        </li>
+        %end
+    </ul>
+</div>
+%end
 
 

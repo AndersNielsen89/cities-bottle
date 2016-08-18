@@ -1,10 +1,11 @@
 """
 Routes and views for the bottle application.
 """
-
+# -*- coding: utf-8 -*-
 from bottle import route, view, request, post
 from datetime import datetime
 import opendata as od
+import json
 @route('/')
 @route('/home')
 @view('index')
@@ -24,6 +25,15 @@ def contact():
         year=datetime.now().year
     )
 
+@route('/test')
+@view('test')
+def test():
+    """Renders the contact page."""
+    return dict(
+        title='Test',
+        message='Your contact page.',
+        year=datetime.now().year
+    )
 @route('/about')
 @view('about')
 def about():
@@ -58,14 +68,21 @@ def sources():
 @route('/source')
 @view('source')
 def source():
-    
+    source = None
+    title = "Meta data"
     id = request.query['id']
-    source = od.get_source_metadata(id)
+    if not id == '0':
+        source = od.get_source_metadata(id)
+        source["opendata"] = None
+    else:
+        title = "Add new"
+        source = od.get_list_from_opendata()
     return dict(
-        title='Meta data',
+        title=title,
         source=source,
         year=datetime.now().year
-    )
+           )
+
 @post('/save_source', methods=['POST'])
 def save_source():
     data = request.forms.items()
@@ -81,3 +98,53 @@ def save_source():
         meta["data"].append(item)
     od.save_metadata(meta, meta["name"], meta["Resource Id"])
     return 'done'
+@post('/add_meta_data', methods=['POST'])
+def add_meta_data():
+    data = request.forms.items()
+    user_input = data.pop()[1]
+    url = 'http://portal.opendata.dk/dataset/' + user_input
+    meta_data = od.add_new_source(url)
+    
+    
+    return meta_data
+
+@post('/transfer_data', methods=['POST'])
+def transfer_data():
+    id = data.pop()[1]
+    name = data.pop()[1]
+    #data = od.read_data_from_id(id)
+    #status = od.transfer_data(data, name, remove = True)
+    return
+
+@route('/explore')
+@view('explore')
+def explore():
+    source = None
+    title = "Explore"
+    id = request.query['id']
+    explore_obj = {}
+    name = od.get_name_from_resourceid(id)
+    if name:
+        keys = od.get_metadata_keys(name)
+        if keys:
+            explore_obj = {"name": name, "keys" : keys }
+    else:
+       explore_obj = {"name" : "Not found", "keys" : None }
+   
+    return dict(
+        title=title,
+        explore=explore_obj,
+        year=datetime.now().year
+            )
+@post('/query_data', methods=['GET'])
+def query_data():
+    query = request.forms.dict
+    keys = request.forms.dict["keys[]"]
+    key_dict = {}
+    for key in keys:
+        name,visible = key.split(',')
+        key_dict[name] = visible
+    constraints = request.forms.dict["constraints"]
+    name = request.forms.dict["name"][0]
+    data = od.query_data(name, key_dict, constraints)
+    return json.dumps(data)

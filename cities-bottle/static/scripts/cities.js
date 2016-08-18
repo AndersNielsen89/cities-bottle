@@ -26,7 +26,8 @@ function remove_field(i) {
     console.log(i);
     console.log(key)
     console.log(val);
-    post_ajax(key, val, obj_id, true)
+    url = "save_source"
+    post_ajax(url, key, val, obj_id, true)
     list.removeChild(delObj);
 }
 function save_field(i) {
@@ -47,7 +48,8 @@ function save_field(i) {
         class="btn btn-default btn-sm" onclick="edit_field(' + String(i) + ');" value="">Edit \
         <span class="glyphicon glyphicon-pencil" style="color:#ff9900"></span> \
     </button> '
-    post_ajax(key, val, obj_id, false)
+    url = "save_source"
+    post_ajax(url, key, val, obj_id, false)
 }
 
 function edit_field(i) {
@@ -62,8 +64,8 @@ function edit_field(i) {
     <button type="submit" id="more_fields" class="btn btn-default btn-sm"  onclick="save_field(' + String(i) + ');" > \
     Save <span class="glyphicon glyphicon-ok" style="color:green"></span></button>';
 }
-function post_ajax(key, val, obj_id, del) {
-    $.post("save_source",
+function post_ajax(url, key, val, obj_id, del) {
+    $.post(url,
         {
             key: key,
             value: val,
@@ -74,6 +76,32 @@ function post_ajax(key, val, obj_id, del) {
             console.log("Data: " + data + "\nStatus: " + status);
         });
 }
+function post_ajax(url, link, message) {
+    $.post(url,
+        {
+            key: link
+        },
+        function (data, status) {
+            document.getElementById("status-meta").innerHTML = message
+            console.log(status);
+            console.log(data);
+            document.getElementById("status-meta").innerHTML = "Data transfered";
+            return status;
+        });
+}
+
+
+function add_new_source() {
+    link = document.getElementById('new-item').value
+    document.getElementById("status-meta").innerHTML = "<strong>Loading:</strong> Load begun";
+    message = "<strong>Loading:</strong> Meta data completed";
+    console.log(link);
+    post_ajax("add_meta_data", link, message);
+    message = "<strong>Success:</strong> Data transferred";
+    //post_ajax("transfer_data", link, message);
+    
+}
+
 function choose_top_important_words(tag) {
     splits = tag.split(' ');
     splits.sort(function (a, b) {
@@ -95,7 +123,7 @@ function get_image_from_tags(tag, i) {
     //tag = tag.replace(/oe/g, 'ø')
     console.log(tag);
     img_url = ""
-    url = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=2469e1658db70a7184afabc8520314fb&text=" + tag + "&per_page=1&page=1&format=json&nojsoncallback=1";
+    url = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=fff0c6516d0ab756ba28605e9cef65a8&text=" + tag + "&per_page=1&page=1&format=json&nojsoncallback=1";
     try {
         if (tag != "description") {
             var result = null;
@@ -135,4 +163,110 @@ function replace_all(tag) {
         tag = tag.replace(' ', '+')
     }
     return tag
+}
+function set_new_dataset(link) {
+    document.getElementById('new-item').value = link;
+}
+
+function changeColor(buttonId) {
+    console.log(buttonId);
+    className = document.getElementById(buttonId).className
+    if (className.search("primary") >= 0) {
+        document.getElementById(buttonId).className = "btn btn-default"
+    }
+    else {
+        document.getElementById(buttonId).className = "btn btn-primary"
+    }  
+}
+function query_data() {
+    no_show_btns = document.getElementsByClassName("btn btn-default")
+    keys = []
+    show_btns = document.getElementsByClassName("btn btn-primary")
+
+    for (i = 0; i < show_btns.length ; i++) {
+        key = show_btns[i].innerHTML
+        console.log(key);
+        keys.push(key + ",1");
+    }
+    
+    if (keys.length == 0) {
+        for (i = 0; i < no_show_btns.length ; i++) {
+            key = no_show_btns[i].innerHTML
+            console.log(key);
+            keys.push(key + ",1");
+        }
+    }
+    
+    console.log(keys);
+    name = document.getElementById("dataname").value;
+    constraints = null
+    post_ajax("query_data", keys, name, constraints);
+
+}
+function post_ajax(url, keys, name, constraints) {
+    var result="";
+    
+    $.post(url,
+          {
+              keys: keys,
+              name: name,
+              constraints: constraints
+          },
+          function (data, status) {
+              printData(data);
+          });
+}
+function printData(data) {
+    console.log("Data: " + data);
+    data = JSON.parse(data);
+    console.log(data[0]);
+    table_headers = Object.keys(data[0]);
+    
+    
+    console.log(table_headers.length);
+    
+    tableCreate(table_headers, data);
+}
+function tableCreate(table_headers, data) {
+    var body = document.getElementsByClassName("table-responsive")[0];
+    var tbl = document.createElement('table');
+    tbl.className = "table";
+    tbl.style.width = '100%';
+    
+
+    var thead = document.createElement('thead');
+    var tr = document.createElement('tr');
+    for (var i = 0; i < table_headers.length; i++) {
+        
+        var th = document.createElement('th');
+        console.log("TR Head " + table_headers[i])
+        th.innerHTML = table_headers[i]
+        tr.appendChild(th);
+        
+    }
+    thead.appendChild(tr);
+    var tbdy = document.createElement('tbody');
+    
+    for (var j = 0; j < data.length; j++) {
+        d = data[j]
+        var tr = document.createElement('tr');
+        for (var i = 0; i < table_headers.length; i++) {
+
+            var td = document.createElement('td');
+            var s = d[table_headers[i]]
+            if (s != null) s = s.replace(/\u0159/g, 'ø').replace(/\u0107/g, 'æ').replace(/\u013/g, 'æ').replace(/\u0106/g, 'Ć')
+            td.innerHTML = s;
+            tr.appendChild(td);
+
+        }
+        tbdy.appendChild(tr);
+    }
+    
+    tbl.appendChild(thead);
+    tbl.appendChild(tbdy);
+    test = document.getElementsByClassName("table-responsive")[0]
+    while (test.hasChildNodes()) {
+        test.removeChild(test.firstChild);
+    }
+    document.getElementsByClassName("table-responsive")[0].appendChild(tbl)
 }

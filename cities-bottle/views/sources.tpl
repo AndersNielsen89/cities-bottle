@@ -1,6 +1,6 @@
 % rebase('layout.tpl', title=title, year=year)
 
-<h2>{{ title }}.</h2>
+<span><h2>{{ title }} <a href="/source?id=0" class="btn btn-success" role="button" >New Source <span class="glyphicon glyphicon-plus"></a></h2></span>
 
     %count = 0
     
@@ -15,7 +15,7 @@
 
                     <h3>{{source["name"]}} </h3>
                     <p>{{source["Description"]}}</p>
-                    <p><a href="/source?id={{source["_id"]}}" class=" btn btn-primary" role="button">Explore &raquo;</a>
+                    <p><a href="/explore?id={{source["Resource Id"]}}" class=" btn btn-primary" role="button">Explore &raquo;</a>
                         <a href="/source?id={{source["_id"]}}" class="btn btn-info" role="button">Meta data &raquo;</a>
 
                 </div>
