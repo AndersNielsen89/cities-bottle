@@ -16,6 +16,7 @@ cities-bottle/obj/
 
 # Auto-generated virtual environment
 cities-bottle/env/
+cities-bottle/env-32/
 
 # Auto-generated web.config
 cities-bottle/web.config
