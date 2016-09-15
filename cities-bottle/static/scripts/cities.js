@@ -27,7 +27,7 @@ function remove_field(i) {
     console.log(key)
     console.log(val);
     url = "save_source"
-    post_ajax(url, key, val, obj_id, true)
+    post_ajax_save(url, key, val, obj_id, true)
     list.removeChild(delObj);
 }
 function save_field(i) {
@@ -49,7 +49,7 @@ function save_field(i) {
         <span class="glyphicon glyphicon-pencil" style="color:#ff9900"></span> \
     </button> '
     url = "save_source"
-    post_ajax(url, key, val, obj_id, false)
+    post_ajax_save(url, key, val, obj_id, false)
 }
 
 function edit_field(i) {
@@ -64,7 +64,7 @@ function edit_field(i) {
     <button type="submit" id="more_fields" class="btn btn-default btn-sm"  onclick="save_field(' + String(i) + ');" > \
     Save <span class="glyphicon glyphicon-ok" style="color:green"></span></button>';
 }
-function post_ajax(url, key, val, obj_id, del) {
+function post_ajax_save(url, key, val, obj_id, del) {
     $.post(url,
         {
             key: key,
@@ -181,25 +181,36 @@ function changeColor(buttonId) {
 function query_data() {
     no_show_btns = document.getElementsByClassName("btn btn-default")
     keys = []
+    constraints = []
     show_btns = document.getElementsByClassName("btn btn-primary")
 
     for (i = 0; i < show_btns.length ; i++) {
-        key = show_btns[i].innerHTML
-        console.log(key);
-        keys.push(key + ",1");
+        if (show_btns[i].id.search('-button') == -1) {
+            key = show_btns[i].innerHTML
+            console.log(key);
+            keys.push(key + ",1");
+        }
+        else if(document.getElementById("query-holder").value != ""){ 
+            key = show_btns[i].innerHTML
+            console.log(key);
+            constraints.push(key + "," + document.getElementById("query-holder").value);
+        }
     }
     
     if (keys.length == 0) {
         for (i = 0; i < no_show_btns.length ; i++) {
-            key = no_show_btns[i].innerHTML
-            console.log(key);
-            keys.push(key + ",1");
+            if (no_show_btns[i].id.search('-button') == -1) {
+                key = no_show_btns[i].innerHTML
+                console.log(key);
+                keys.push(key + ",1");
+            }
         }
     }
-    
+    var selected = $('.form-control').find("option:selected").text();
     console.log(keys);
+    console.log(constraints);
     name = document.getElementById("dataname").value;
-    constraints = null
+    //constraints = null
     post_ajax("query_data", keys, name, constraints);
 
 }
@@ -269,4 +280,27 @@ function tableCreate(table_headers, data) {
         test.removeChild(test.firstChild);
     }
     document.getElementsByClassName("table-responsive")[0].appendChild(tbl)
+}
+function getWhereField() {
+    var selected = $('.form-control').find("option:selected").text();
+    var divtest = document.getElementById("where-container")
+    //divtest.innerHTML = '<span><input type="text" id="where-' + String(selected) + '" />'
+    //console.log(selected);
+}
+function changeColorsForGroup(buttonId) {
+    className = document.getElementById(buttonId).className
+    if (className.search("primary") >= 0) {
+        document.getElementById(buttonId).className = "btn btn-default"
+        
+    }
+    else {
+        document.getElementById(buttonId).className = "btn btn-primary"
+        btns = $("#incontainer").find('button');
+        for (var i = 0; i < btns.length; i++) {
+            btn = btns[i];
+            if (btn.id != buttonId) {
+                btn.className = "btn btn-default"
+            }
+        }
+    }
 }

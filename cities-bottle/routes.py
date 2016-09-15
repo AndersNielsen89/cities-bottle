@@ -91,9 +91,12 @@ def save_source():
     val = data[2][1]
     delete = data[0][1]
     meta = od.get_source_metadata(id)
+    meta_keys = [dic.keys()[0] for dic in meta["data"]]
     item = {key : val}
-    if delete:
+    if delete == 'true':
         meta["data"].remove(item)
+    elif key in meta_keys:
+        meta["data"][meta_keys.index(key)] = item
     else:
         meta["data"].append(item)
     od.save_metadata(meta, meta["name"], meta["Resource Id"])
@@ -101,7 +104,7 @@ def save_source():
 @post('/add_meta_data', methods=['POST'])
 def add_meta_data():
     data = request.forms.items()
-    user_input = data.pop()[1]
+    user_input = request.forms.items()[0][1]
     url = 'http://portal.opendata.dk/dataset/' + user_input
     meta_data = od.add_new_source(url)
     
@@ -144,7 +147,7 @@ def query_data():
     for key in keys:
         name,visible = key.split(',')
         key_dict[name] = visible
-    constraints = request.forms.dict["constraints"]
+    #constraints = request.forms.dict["constraints[]"]
     name = request.forms.dict["name"][0]
-    data = od.query_data(name, key_dict, constraints)
+    data = od.query_data(name, key_dict, constraints = None)
     return json.dumps(data)

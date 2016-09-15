@@ -18,8 +18,9 @@
     <PythonWsgiHandler>{StartupModule}.wsgi_app()</PythonWsgiHandler>
     <Name>cities-bottle</Name>
     <RootNamespace>cities-bottle</RootNamespace>
-    <InterpreterId>{a606403c-bd9c-4be3-8a6b-e3b8f07535e3}</InterpreterId>
+    <InterpreterId>{e270fab1-0f32-47ce-a981-c770e90c50fe}</InterpreterId>
     <InterpreterVersion>2.7</InterpreterVersion>
+    <NameOfLastUsedPublishProfile>BYG</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,25 +40,30 @@
     <Folder Include="static\" />
     <Folder Include="static\content\" />
     <Folder Include="static\content\Images\" />
+    <Folder Include="static\data\" />
+    <Folder Include="static\extras\" />
     <Folder Include="static\fonts\" />
     <Folder Include="static\scripts\" />
     <Folder Include="views\" />
-    <Folder Include="views\data\" />
-    <Folder Include="views\extras\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="BYG.pubxml" />
     <Content Include="requirements.txt" />
     <Content Include="static\content\bootstrap.css" />
     <Content Include="static\content\bootstrap.min.css" />
     <Content Include="static\content\Images\banner2.jpg" />
     <Content Include="static\content\Images\opendatadk.png" />
     <Content Include="static\content\site.css" />
+    <Content Include="static\data\1000-photos.json" />
+    <Content Include="static\extras\ClusterLayer.js" />
     <Content Include="static\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="static\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="static\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="static\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="static\scripts\bootstrap.js" />
     <Content Include="static\scripts\bootstrap.min.js" />
+    <Content Include="static\scripts\d3.js" />
+    <Content Include="static\scripts\d3.min.js" />
     <Content Include="static\scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="static\scripts\jquery-1.10.2.js" />
     <Content Include="static\scripts\jquery-1.10.2.min.js" />
@@ -73,8 +79,6 @@
     <Content Include="static\scripts\respond.min.js" />
     <Content Include="static\scripts\cities.js" />
     <Content Include="static\scripts\_references.js" />
-    <Content Include="views\data\1000-photos.json" />
-    <Content Include="views\extras\ClusterLayer.js" />
     <Content Include="views\explore.tpl" />
     <Content Include="views\test.tpl" />
     <Content Include="views\source.tpl" />
@@ -87,6 +91,18 @@
     <Content Include="views\visualize.tpl" />
   </ItemGroup>
   <ItemGroup>
+    <Interpreter Include="env-32\">
+      <Id>{e270fab1-0f32-47ce-a981-c770e90c50fe}</Id>
+      <BaseInterpreter>{b39d6d7a-0eff-427e-a56b-b9b3471b308d}</BaseInterpreter>
+      <Version>2.7</Version>
+      <Description>env-32 (Python 32-bit 2.7)</Description>
+      <InterpreterPath>Scripts\python.exe</InterpreterPath>
+      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
+      <LibraryPath>Lib\</LibraryPath>
+      <PathEnvironmentVariable>
+      </PathEnvironmentVariable>
+      <Architecture>X86</Architecture>
+    </Interpreter>
     <Interpreter Include="env\">
       <Id>{a606403c-bd9c-4be3-8a6b-e3b8f07535e3}</Id>
       <BaseInterpreter>{9a7a9026-48c1-4688-9d5d-e5699d47d074}</BaseInterpreter>
