@@ -123,11 +123,11 @@ def get_metadata_keys(name):
     keys = db[name].find_one({}, {"_id": 0}).keys()
     return keys
 
-def query_data(name, keys, constraints):
+def query_data(name, keys, constraints = {}):
     client = MongoClient()
     db = client.opendata
     keys["_id"] = 0
-    items = db[name].find({},keys).limit(10)
+    items = db[name].find(constraints, keys).limit(10)
     data = []
     for item in items:
         data.append(item)

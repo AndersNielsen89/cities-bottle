@@ -191,9 +191,11 @@ function query_data() {
             keys.push(key + ",1");
         }
         else if(document.getElementById("query-holder").value != ""){ 
-            key = show_btns[i].innerHTML
+            key = $("#constraint-list option:selected").text();
+            con_type = show_btns[i].innerHTML
             console.log(key);
-            constraints.push(key + "," + document.getElementById("query-holder").value);
+            constraints.push([key, document.getElementById("query-holder").value, con_type]);
+            //{"username" : /.*son.*/i}
         }
     }
     
@@ -250,7 +252,7 @@ function tableCreate(table_headers, data) {
     for (var i = 0; i < table_headers.length; i++) {
         
         var th = document.createElement('th');
-        console.log("TR Head " + table_headers[i])
+        //console.log("TR Head " + table_headers[i])
         th.innerHTML = table_headers[i]
         tr.appendChild(th);
         

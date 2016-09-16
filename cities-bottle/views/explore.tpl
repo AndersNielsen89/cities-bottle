@@ -20,7 +20,7 @@ This page enables you to query data.
     <div class="row">
         <div class="col-lg-6" id="dropdown-container">
 
-            <select class="form-control" onchange="getWhereField()" style="display: inline">
+            <select id="constraint-list" class="form-control" onchange="getWhereField()" style="display: inline">
                 %count = 0
                 % if explore["keys"]:
                 % for key in explore["keys"]:

@@ -147,7 +147,22 @@ def query_data():
     for key in keys:
         name,visible = key.split(',')
         key_dict[name] = visible
-    #constraints = request.forms.dict["constraints[]"]
+    constraints = {}
+    if "constraints[0][]" in request.forms.dict.keys():
+        constraints = handle_constraints(request.forms.dict["constraints[0][]"])
     name = request.forms.dict["name"][0]
-    data = od.query_data(name, key_dict, constraints = None)
+    data = od.query_data(name, key_dict, constraints)
     return json.dumps(data)
+
+def handle_constraints(constraints):
+    key = constraints[0]
+    value = constraints[1]
+    con = constraints[2]
+    con_val = {}
+    if con == 'In':
+        con_val = { key: { "$in" : [v for v in value.split(',')] } }
+    if con == "Contains":
+        con_val = { key : "/.*" + value + ".*/i" }
+    if con == "Equals":
+        con_val = { key: { "$regex" : ".*" + value + ".*" } }
+    return con_val
