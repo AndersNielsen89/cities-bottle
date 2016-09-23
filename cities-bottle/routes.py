@@ -2,10 +2,16 @@
 Routes and views for the bottle application.
 """
 # -*- coding: utf-8 -*-
-from bottle import route, view, request, post
+# Python imports
 from datetime import datetime
-import opendata as od
 import json
+
+# Bottle imports
+from bottle import route, view, request, post
+
+# CITIES lib imports
+import opendata as od
+
 
 @route('/')
 @route('/home')

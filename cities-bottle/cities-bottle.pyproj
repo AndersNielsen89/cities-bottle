@@ -47,6 +47,8 @@
     <Folder Include="views\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="web.config" />
+    <None Include="web.debug.config" />
     <None Include="BYG.pubxml" />
     <Content Include="requirements.txt" />
     <Content Include="static\content\bootstrap.css" />
