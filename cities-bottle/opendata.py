@@ -15,6 +15,7 @@ BASE_URL = 'http://portal.opendata.dk'
 
 
 def read_data_from_id(id, limit = 0, saveFile = False):
+    """ Reads the data from opendata url """
     limit_str = ''
     if limit > 0:
         limit_str = '&limit=' + str(limit)
@@ -24,6 +25,8 @@ def read_data_from_id(id, limit = 0, saveFile = False):
     return data
 
 def transfer_data(data, name, save_file=False, remove=False):
+    """ Loads a data object into a new collection 
+    Also saves the content as a file if specified."""
     if not data['success']:
         return False
     client = MongoClient()
@@ -49,6 +52,7 @@ def print_data(table_name, db):
         print row
 
 def save_metadata(metadata, name, id):
+    """ Saves the meta data for a source """
     metadata["name"] = name
     client = MongoClient()
     db = client.opendata
@@ -64,6 +68,7 @@ def save_metadata(metadata, name, id):
     print_data(table_name, db)
 
 def get_source_metadata(id = None):
+    """ Get meta data for a known, stored data set """
     client = MongoClient()
     db = client.opendata
     table_name = 'metadata'
@@ -76,7 +81,9 @@ def get_source_metadata(id = None):
         table_data = db[table_name].find()
         sources = [source for source in table_data]
         return sources
+
 def add_new_source(url):
+    """ Adds a new dataset from open data url """
     ids, name, site_url = hh.get_id_and_site_url(url)
     client = MongoClient()
     db = client.opendata
@@ -101,6 +108,7 @@ def add_new_source(url):
     else:
         return {"status" : "success" }
 def get_list_from_opendata():
+    """ Gets the list of available sources from open data """
     client = MongoClient()
     db = client.opendata
     table_name = 'datasets'
@@ -124,6 +132,7 @@ def get_metadata_keys(name):
     return keys
 
 def query_data(name, keys, constraints = {}):
+    """ Used by Explore to look in data """
     client = MongoClient()
     db = client.opendata
     keys["_id"] = 0

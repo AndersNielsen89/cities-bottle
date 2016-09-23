@@ -159,10 +159,12 @@ def handle_constraints(constraints):
     value = constraints[1]
     con = constraints[2]
     con_val = {}
+    
     if con == 'In':
         con_val = { key: { "$in" : [v for v in value.split(',')] } }
-    if con == "Contains":
-        con_val = { key : "/.*" + value + ".*/i" }
     if con == "Equals":
+        con_val = { key : value }
+    if con == "Contains":
         con_val = { key: { "$regex" : ".*" + value + ".*" } }
+    
     return con_val

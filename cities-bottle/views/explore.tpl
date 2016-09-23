@@ -9,7 +9,7 @@ This page enables you to query data.
     %count = 0
     % if explore["keys"]:
     % for key in explore["keys"]:
-    <button type="button" class="btn btn-default" id="key{{count}}" onclick="changeColor('key{{count}}');">{{key}}</button>
+    <button type="button" class="btn btn-primary" id="key{{count}}" onclick="changeColor('key{{count}}');">{{key}}</button>
     %count += 1
     % end
 </div>
