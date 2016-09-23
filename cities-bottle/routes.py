@@ -6,6 +6,7 @@ from bottle import route, view, request, post
 from datetime import datetime
 import opendata as od
 import json
+
 @route('/')
 @route('/home')
 @view('index')
@@ -34,6 +35,7 @@ def test():
         message='Your contact page.',
         year=datetime.now().year
     )
+
 @route('/about')
 @view('about')
 def about():
@@ -53,7 +55,6 @@ def projects():
         message='Your application description page.',
         year=datetime.now().year
     )
-
 
 @route('/sources')
 @view('sources')
@@ -101,6 +102,7 @@ def save_source():
         meta["data"].append(item)
     od.save_metadata(meta, meta["name"], meta["Resource Id"])
     return 'done'
+
 @post('/add_meta_data', methods=['POST'])
 def add_meta_data():
     data = request.forms.items()
@@ -166,5 +168,4 @@ def handle_constraints(constraints):
         con_val = { key : value }
     if con == "Contains":
         con_val = { key: { "$regex" : ".*" + value + ".*" } }
-    
     return con_val

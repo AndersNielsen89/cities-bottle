@@ -1,5 +1,5 @@
-__author__ = 'Anders'
 # -*- coding: utf-8 -*-
+""" Handles all database and url requests """
 # Python Imports
 import urllib
 import json
@@ -7,12 +7,12 @@ import datetime
 
 #Third party imports
 from pymongo import MongoClient
-
-# Picodat libs
-import html_handler as hh
 from bson.objectid import ObjectId
-BASE_URL = 'http://portal.opendata.dk'
 
+# CITIES lib imports
+import html_handler as hh
+
+BASE_URL = 'http://portal.opendata.dk'
 
 def read_data_from_id(id, limit = 0, saveFile = False):
     """ Reads the data from opendata url """
@@ -46,7 +46,9 @@ def transfer_data(data, name, save_file=False, remove=False):
         with open(id + '.json', 'w') as outfile:
             json.dump(data, outfile)
     return True
+
 def print_data(table_name, db):
+    """ Prints data in console. Dev only """
     cursor = db[table_name].find()
     for row in cursor:
         print row
