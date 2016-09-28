@@ -1,7 +1,7 @@
 % rebase('layout.tpl', title=title, year=year)
 
 %if title != "Add new": 
-<h2>{{ title }} -  {{source["name"] }} </h2> 
+<h2>{{ title }} -  {{source["name"] }} <a href="http://portal.opendata.dk/dataset/{{source["name"] }} ">(Source)</a> </h2> 
 % else: 
 <h2>{{ title }}</h2>
 %end
@@ -30,12 +30,19 @@ New field  <button type="button" id="more_fields" class="btn btn-default btn-sm"
 </ul>
 %else:
 <div class="form-group">
-    <label for="new-item">Name (as stated on portal.opendata.dk)</label> 
-    <div><input type="text" class="form-control" id="new-item"><span class="btn btn-success" role="button" style="margin-top: 8px" onclick="add_new_source();">Add</span></div>
-    <p><div id="status-meta"></div></p>
-    <div><h3>Or click on examples from OpenData.dk: </h3></div>
+    <div class="row">
+        <div class="col-md-6">
+            <label for="new-item">Name (as stated on portal.opendata.dk)</label>
+            <div><input type="text" class="form-control" id="new-item"><span class="btn btn-success" role="button" style="margin-top: 8px" onclick="add_new_source();">Add</span></div>
+            <p><div id="status-meta"></div></p>
+        </div>
+        <div class="col-md-6">
+            On this page it's possible to load a URL from opendata by entering its pathname. For instance, to load the URL http://portal.opendata.dk/dataset/trafiktal/, type in "trafiktal".
+        </div>
+    </div>
+    <div><h3>Or load from OpenData.dk by clicking on the list below: </h3></div>
     <ul class="list-group">
-        
+
         %for data in source["opendata"]:
         <li class="list-group-item" onclick="set_new_dataset('{{data["link"]}}');">
             <strong>{{data["title"]}}</strong>

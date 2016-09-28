@@ -14,7 +14,7 @@ This page enables you to query data.
     % end
 </div>
 <p></p>
-<h3>Narrow down your search (under udvikling):</h3>
+<h3>Narrow down your search:</h3>
 <div class="well well-lg">
     This section allows you to retrieve only a subset of the documents matching a certain criteria. 
     <div class="row">

@@ -35,6 +35,9 @@
     <Compile Include="html_handler.py" />
     <Compile Include="opendata.py" />
     <Compile Include="routes.py" />
+    <Compile Include="scheduler.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="static\" />
@@ -47,6 +50,7 @@
     <Folder Include="views\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="static\content\Images\cities-banner.jpg" />
     <Content Include="web.config" />
     <None Include="web.debug.config" />
     <None Include="BYG.pubxml" />

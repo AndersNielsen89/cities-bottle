@@ -28,18 +28,6 @@
     % end
 
 
-<!--<ul>
-  % for source in sources:
-    <li><h3><a href="/source?id={{source["_id"]}}">{{source["name"]}} - Sidst opdateret: {{source["data"][0]["Sidst opdateret"]}}</a></h3></li>
-	
-		%for data in source["data"]:
-		%d = data.items()[0]
-		<li>{{d[0]}} : {{d[1]}}</li>
-        %break
-        % end
-    
-  % end
-</ul>-->
 
 
 <script src="/static/scripts/jquery-1.10.2.js"></script>

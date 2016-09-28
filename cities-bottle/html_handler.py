@@ -14,25 +14,34 @@ def open_html(url):
     soup = BeautifulSoup(html_doc, 'html.parser')
     return soup
 
-def get_metadata_for_resource(resource_url, id):
-    """ Gets metadata as displayed on opendata """
-    data = []
-    soup = open_html(resource_url)
+def read_meta_data(url, data, meta = False):
+    soup = open_html(url)
     for tr in soup.find_all('tr'):
         key = tr.find('th')
         val = tr.find('td')
         if key and val:
             key = key.string
             val = val.string
-            data.append({key: val})
-    meta_data = {"Resource Id": id, "data": data}
+            if meta:
+                data[key] = val
+            else:
+                data.append({key: val})
+    return data, soup
 
+def get_metadata_for_resource(resource_url, site_url, id):
+    """ Gets metadata as displayed on opendata """
+    data = []
+    data, soup = read_meta_data(resource_url, data)
+
+    meta_data = {"Resource Id": id, "data": data}
     for bq in soup.find_all('blockquote'):
         meta_data["Description"] = bq.text.replace('\n','')
     try:
         meta_data["Description"] is None
     except:
         meta_data["Description"] = "No description found"
+    meta_data, soup = read_meta_data(site_url.replace('/resource/',''), meta_data, True)
+    meta_data, soup = read_meta_data(resource_url, meta_data, True)
     return meta_data
 
 def get_id_and_site_url(url):
@@ -82,9 +91,9 @@ def get_resource_id(url):
     else:
         False
 
-def get_available_datasets():
+def get_available_datasets(page = 1):
     """ Gets names of datasets except already stored datasets """
-    url = 'http://portal.opendata.dk/dataset?res_format=CSV&page=1'
+    url = 'http://portal.opendata.dk/dataset?res_format=CSV&page=' + str(page)
     soup = open_html(url)
     count = 0
     data = []

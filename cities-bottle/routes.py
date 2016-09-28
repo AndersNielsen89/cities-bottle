@@ -77,7 +77,11 @@ def sources():
 def source():
     source = None
     title = "Meta data"
-    id = request.query['id']
+    id = '0'
+    try:
+        id = request.query['id']
+    except:  # Id was not provided in the URL
+        id = '0' 
     if not id == '0':
         source = od.get_source_metadata(id)
         source["opendata"] = None
@@ -136,7 +140,7 @@ def explore():
     explore_obj = {}
     name = od.get_name_from_resourceid(id)
     if name:
-        keys = od.get_metadata_keys(name)
+        keys = od.get_metadata_keys(name, id)
         if keys:
             explore_obj = {"name": name, "keys" : keys }
     else:

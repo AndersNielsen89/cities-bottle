@@ -85,7 +85,7 @@ function post_ajax(url, link, message) {
             document.getElementById("status-meta").innerHTML = message
             console.log(status);
             console.log(data);
-            document.getElementById("status-meta").innerHTML = "Data transfered";
+            document.getElementById("status-meta").innerHTML = "<strong>Success:</strong> Data transfered";
             return status;
         });
 }
@@ -93,7 +93,7 @@ function post_ajax(url, link, message) {
 
 function add_new_source() {
     link = document.getElementById('new-item').value
-    document.getElementById("status-meta").innerHTML = "<strong>Loading:</strong> Load begun";
+    document.getElementById("status-meta").innerHTML = "<strong>Loading:</strong> Load begun - do NOT close this page.";
     message = "<strong>Loading:</strong> Meta data completed";
     console.log(link);
     post_ajax("add_meta_data", link, message);
@@ -213,10 +213,10 @@ function query_data() {
     console.log(constraints);
     name = document.getElementById("dataname").value;
     //constraints = null
-    post_ajax("query_data", keys, name, constraints);
+    post_ajax_q("query_data", keys, name, constraints);
 
 }
-function post_ajax(url, keys, name, constraints) {
+function post_ajax_q(url, keys, name, constraints) {
     var result="";
     
     $.post(url,

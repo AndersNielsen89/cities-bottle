@@ -24,6 +24,14 @@ textarea {
     margin-top: 45px;
 
 }
+.banner-cities {
+    background-image: url("Images/cities-banner.jpg");
+    height: 14em;
+    background-position: center;
+    position: relative;
+    background-size: cover;
+
+}
 .label,.badge {
     display: inline-block;
     padding: 2px 4px;

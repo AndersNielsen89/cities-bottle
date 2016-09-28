@@ -29,9 +29,9 @@
                         <a href="#page-top"></a>
                     </li>
                     
-                    <!--<li><a href="/projects">Projects</a></li>-->
+                    <li><a href="/about">About</a></li>
                     <li><a href="/sources">Sources</a></li>
-                    <li><div><a href="/source?id=0" class="btn btn-success" role="button" style="margin-top: 8px">New Source</a></div></li>
+                    <li><div><a href="/source" class="btn btn-success" role="button" style="margin-top: 8px">New Source</a></div></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->

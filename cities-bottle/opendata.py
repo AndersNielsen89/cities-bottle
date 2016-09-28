@@ -21,7 +21,8 @@ def read_data_from_id(id, limit = 0, saveFile = False):
         limit_str = '&limit=' + str(limit)
     url = 'http://portal.opendata.dk/api/action/datastore_search?resource_id=' + id + limit_str
     fileobj = urllib.urlopen(url)
-    data = json.loads(fileobj.read())
+    read_obj = fileobj.read()
+    data = json.loads(read_obj)
     return data
 
 def transfer_data(data, name, save_file=False, remove=False):
@@ -41,7 +42,7 @@ def transfer_data(data, name, save_file=False, remove=False):
     for roof in roofs:
         db[table_name].insert(roof)
 
-    print_data(table_name, db)
+    #print_data(table_name, db)
     if save_file:
         with open(id + '.json', 'w') as outfile:
             json.dump(data, outfile)
@@ -95,7 +96,7 @@ def add_new_source(url):
         metadata = db["metadata"].find_one({"Resource Id": id}, {"_id" : 0 })
         if not metadata :
             resource_url = site_url + id
-            metadata = hh.get_metadata_for_resource(resource_url, id)
+            metadata = hh.get_metadata_for_resource(resource_url, site_url, id)
             save_metadata(metadata, name, id)
             db["loaded_data"].insert_one({"title": id, "loaded" : str(datetime.datetime.now().date()) })
             #data = read_data_from_id(id)
@@ -114,22 +115,33 @@ def get_list_from_opendata():
     client = MongoClient()
     db = client.opendata
     table_name = 'datasets'
-    if db[table_name].find_one():
+    recently_downloaded = db.datasets.count()
+    existing_count = db.metadata.count()
+    if recently_downloaded > 0:
+        if recently_downloaded - existing_count < 10:
+            page = recently_downloaded / 10
+            data = hh.get_available_datasets(page)
+            result = db[table_name].insert_many(data)
         existing_datasets = [l.items()[0][1] for l in db["metadata"].find({},{ "name" : 1, "_id" : 0 } )]
-        return {"opendata" : db[table_name].find({"link": {"$nin" : existing_datasets }}).limit(10)}
+        open_data_list ={"opendata" : db[table_name].find({"link": {"$nin" : existing_datasets }})}
+        return open_data_list
     else:
         data = hh.get_available_datasets()
         result = db[table_name].insert_many(data)
         return {"opendata" : data }
+
 def get_name_from_resourceid(resource_id):
     client = MongoClient()
     db = client.opendata
     name = db["metadata"].find_one({"Resource Id" : resource_id}, {"_id": 0})["name"]
     return name
 
-def get_metadata_keys(name):
+def get_metadata_keys(name, id):
     client = MongoClient()
     db = client.opendata
+    if db[name].find_one() is None:
+        data = read_data_from_id(id)
+        #status = transfer_data(data, name, remove = True)
     keys = db[name].find_one({}, {"_id": 0}).keys()
     return keys
 
@@ -166,7 +178,7 @@ if __name__ == '__main__':
     for user_input in user_inputs:
         id, name, site_url = hh.get_id_and_site_url(user_input)
         resource_url = site_url + '/' + id
-        metadata = hh.get_metadata_for_resource(resource_url, id)
+        metadata = hh.get_metadata_for_resource(resource_url, site_url, id)
         save_metadata(metadata, name, id)
         data = read_data_from_id(id)
         status = transfer_data(data, name, remove = True)
