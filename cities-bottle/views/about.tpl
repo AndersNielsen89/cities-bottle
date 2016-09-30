@@ -24,3 +24,6 @@ Use of this data should always be according to their license agreements, which c
 
     <li><p>The <b>commercial perspective</b> of CITIES is to identify and establish solutions which can form the background for commercial opportunities within the smart cities environment, and to support the development of these  and other smart cities demonstration projects, including through a range of decision support tools to be developed as a result of our research efforts.</p></li>
 </ul>
+
+<h3>Documentation</h3>
+The documentation for the site as well as a user guide can be downloaded <a href="https://www.dropbox.com/s/m463e3w25hpqzol/Documentation.docx">here</a> (.docx)
